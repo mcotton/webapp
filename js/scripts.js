@@ -14,10 +14,11 @@ $(document).ready(function() {
         })
     } else {
         user_id = sessionStorage.getItem('user_id')
-        loadContentPane()   
-        loadBadgesPane()
-        loadFriendsPane()
-        loadHistoryPane()
+        amplify.publish('user_loggedin')
+        //loadContentPane()   
+        //loadBadgesPane()
+        //loadFriendsPane()
+        //loadHistoryPane()
     }
 
 
@@ -29,12 +30,13 @@ $(document).ready(function() {
             sessionStorage.setItem('lng', position.coords.longitude)
             user_lat = sessionStorage.getItem('lat')
             user_lng = sessionStorage.getItem('lng')
-            waitForGeolocation() 
+            amplify.publish('geolocation_changed')
         })
     } else {
         console.log('geolocation is not available, using default')
         user_lat = '29.43288'
         user_lng = '-98.500389999999996'
+        amplify.publish('geolocation_changed')
     }
         
     // Login form queries the API
@@ -47,44 +49,26 @@ $(document).ready(function() {
  
                         sessionStorage.setItem('user_id', data.data.user.id)
                         $('#loginModal').modal('hide')
-                        loadContentPane()
-                        loadBadgesPane()
-                        loadDealsPane()
-                        loadFriendsPane()
+                        amplify.publish('user_loggedin')
                     })
     })
 
     $('#change_location1').click(function() {
         user_lat = '29.6256999999999984'    
         user_lng = '-98.4958599999999933'  
-        waitForGeolocation()
-        loadContentPane()
-        loadBadgesPane()
-        loadFriendsPane()
-        loadHistoryPane()  
-        console.log('Changing location')
+        amplify.publish('geolocation_changed')
     })
    
     $('#change_location2').click(function() {
         user_lat = '29.4328900000000004'    
         user_lng = '-98.5003899999999959'  
-        waitForGeolocation()
-        loadContentPane()
-        loadBadgesPane()
-        loadFriendsPane()
-        loadHistoryPane()  
-        console.log('Changing location')
+        amplify.publish('geolocation_changed')
     })
 
     $('#change_location3').click(function() {
         user_lat = '29.7900500000000008'    
         user_lng = '-98.7296300000000002'  
-        waitForGeolocation()
-        loadContentPane()
-        loadBadgesPane()
-        loadFriendsPane()
-        loadHistoryPane()  
-        console.log('Changing location')
+        amplify.publish('geolocation_changed')
     })
 })
                  
@@ -190,4 +174,23 @@ $(document).ready(function() {
        }
 
 
-    
+amplify.subscribe('geolocation_changed', function() {
+        console.log('amplify caught a geolocation_changed event')
+        waitForGeolocation()
+        loadContentPane()
+        loadFriendsPane()
+        loadBadgesPane()
+        loadHistoryPane()  
+}) 
+
+
+amplify.subscribe('user_loggedin', function(){
+        console.log('amplify caught a user_loggedin event')
+        loadContentPane()
+        loadBadgesPane()
+        loadFriendsPane()
+})
+
+
+
+
