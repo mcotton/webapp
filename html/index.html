@@ -13,6 +13,16 @@
       body {
         padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
+      .well {
+        max-height: 600px;
+        overflow-y: auto;
+      }  
+      td img {
+        height: 40px;
+        width: 40px;
+        float: left;
+        border: 0;
+      }
     </style>
     <link href="../css/bootstrap-responsive.css" rel="stylesheet">
 
@@ -43,9 +53,9 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a id="change_location1" href='#'>Change Location to Stone Oak</a></li>
-              <li><a id="change_location2" href='#'>Change Location to Social Commerce</a></li>
-              <li><a id="change_location3" href='#'>Change Location to Boerne</a></li>
+              <li><a class="change_location" href='#'>Jump to Stone Oak</a></li>
+              <li><a class="change_location" href='#'>Jump to Social Commerce</a></li>
+              <li><a class="change_location"  href='#'>Jump to Boerne</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -58,34 +68,46 @@
             <div class='span12'>
                 <ul class='thumbnails'>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                     <li class='span2'>
-                        <a href='#' class='thumbnail'>
+                        <div class='thumbnail'>
                             <img src='http://placehold.it/260x180'>
-                        </a>
+                            <h4>Location</h4>
+                            <p>Description goes here</p>
+                        </div>
                     </li>
                 </ul>
             </div>
@@ -123,14 +145,6 @@
                         <h4>Badges</h4>
                         <hr>
                             <div id='badges_pane'>
-                                <div class='row'>
-                                    <div class='span1'>
-                                        <ul id='won_true'>Unlocked</ul>
-                                    </div>
-                                    <div class='span2'>
-                                        <ul id='won_false'>Locked</ul>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                 </div>
