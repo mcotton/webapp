@@ -115,23 +115,40 @@ $(document).ready(function() {
             $('#places_pane').append('<table class="table" id="favorite_places">Favorite</table>')
             $('#places_pane').append('<table class="table" id="recommended_places">Recommended</table>')
             $('#places_pane').append('<table class="table" id="local_places">Local</table>')
+            loadFeaturedPlaces(data.data.results)
             for(var i=0; i< data.data.results.local.length; i++)  {
-                $.get(server + '/location/' + data.data.results.local[i].location_id, function(data) {
-                    $('#local_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
-                })
+                    $('#local_places').append('<tr><td>' + data.data.results.local[i].name + '</td></tr>')
 			}
             for(var i=0; i< data.data.results.recommended.length; i++)  {
-                $.get(server + '/location/' + data.data.results.recommended[i].location_id, function(data) {
-                    $('#recommended_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
-                })
+                    $('#recommended_places').append('<tr><td>' + data.data.results.recommended[i].name + '</td></tr>')
 			}
             for(var i=0; i< data.data.results.favorites.length; i++)  {
-                $.get(server + '/location/' + data.data.results.favorites[i].location_id, function(data) {
-                    $('#favorite_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
-                })
+                    $('#favorite_places').append('<tr><td>' + data.data.results.favorites[i].name + '</td></tr>')
 			}
         })
     }
+
+   function loadFeaturedPlaces(data) {
+      console.log(data)
+      lst = []
+      icons = $('.thumbnail')
+      for(var i=0; i< data.favorites.length; i++) {
+          lst.push(data.favorites[i])
+      }
+      for(var i=0; i< data.recommended.length; i++) {
+          lst.push(data.recommended[i])
+      }
+      for(var i=0; i< data.local.length; i++) {
+          lst.push(data.local[i])
+      }
+      for(var i=0; i< lst.length; i++) {
+         if(i < 6) {
+            icons[i].children[1].innerHTML = lst[i].name
+            icons[i].children[2].innerHTML = lst[i].street_1
+         } 
+      }
+       
+   }
 
    function loadDealsPane(data) { 
        // Load content for deals
