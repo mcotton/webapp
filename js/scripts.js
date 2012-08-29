@@ -15,10 +15,6 @@ $(document).ready(function() {
     } else {
         user_id = sessionStorage.getItem('user_id')
         amplify.publish('user_loggedin')
-        //loadContentPane()   
-        //loadBadgesPane()
-        //loadFriendsPane()
-        //loadHistoryPane()
     }
 
 
@@ -53,35 +49,44 @@ $(document).ready(function() {
                     })
     })
 
-    $('#change_location1').click(function() {
-        user_lat = '29.6256999999999984'    
-        user_lng = '-98.4958599999999933'  
-        amplify.publish('geolocation_changed')
-    })
-   
-    $('#change_location2').click(function() {
-        user_lat = '29.4328900000000004'    
-        user_lng = '-98.5003899999999959'  
-        amplify.publish('geolocation_changed')
+    $('.change_location').click(function() {
+        var index = $('.change_location').index(this)
+        console.log(index)
+        switch(index) {
+            case 0:
+                user_lat = '29.6256999999999984'    
+                user_lng = '-98.4958599999999933'  
+                amplify.publish('geolocation_changed')
+                break
+           case 1:
+                user_lat = '29.4328900000000004'    
+                user_lng = '-98.5003899999999959'  
+                amplify.publish('geolocation_changed')
+                break
+           case 2:
+                user_lat = '29.7900500000000008'    
+                user_lng = '-98.7296300000000002'  
+                amplify.publish('geolocation_changed')
+                break
+           default:
+                // Don't want to do anything with it right now
+                break
+        }
     })
 
-    $('#change_location3').click(function() {
-        user_lat = '29.7900500000000008'    
-        user_lng = '-98.7296300000000002'  
-        amplify.publish('geolocation_changed')
-    })
-})
-                 
+}) //document.ready
+  
+               
     // Once they've made it throught the login modal
     // We can use the user_id and start fetching
     // user data to fill these panes
-    function loadContentPane() {
+    function loadFeedPane() {
         // Load content for social
         $.get(server + '/feed', function(data) {
             $('#social_pane').html('')      
-            $('#social_pane').append('<ul></ul>')
+            $('#social_pane').append('<table class="table"></table>')
             for(var i=0; i< data.data.events.length; i++) {
-                $('#social_pane ul').append('<li>' + data.data.events[i].third_person_message + '</li>')
+                $('#social_pane table').append('<tr><td>' + data.data.events[i].third_person_message + '</tr></tr>')
                                                 }
                                         })  
     }
@@ -90,16 +95,12 @@ $(document).ready(function() {
         // Load content for badges
 
         $.get(server + '/badges/' + user_id, function(data) {
-        //  $('#badges_pane').html('')      
-        //  $('#badges_pane').append('<ul id="won_true">Unlocked Badges</ul>')
-        //  $('#badges_pane').append('<ul id="won_false">Locked Badges</ul>')
-        //  console.log(data.data.badges.length)        
+            $('#badges_pane').html('') 
+            $('#badges_pane').append('<table class="table"></table>')     
             for(var i=0; i< data.data.badges.length; i++) {
-        if(data.data.badges[i].won)  {
-            $('#won_true').append('<li>' + data.data.badges[i].name + '</li>')
-        } else {
-            $('#won_false').append('<li>' + data.data.badges[i].name + '</li>')
-        }
+                if(data.data.badges[i].won)  {
+                    $('#badges_pane table').append('<tr><td>' + data.data.badges[i].name + '</td></tr>>')
+                }
             }
         })      
 
@@ -111,22 +112,22 @@ $(document).ready(function() {
         $.get(server + '/places?lat=' + user_lat + '&lng=' + user_lng, function(data) {
             loadDealsPane(data)
             $('#places_pane').html('')
-            $('#places_pane').append('<ul id="local_places">Local</ul>')
-            $('#places_pane').append('<ul id="recommended_places">Recommended</ul>')
-            $('#places_pane').append('<ul id="favorite_places">Favorite</ul>')
+            $('#places_pane').append('<table class="table" id="favorite_places">Favorite</table>')
+            $('#places_pane').append('<table class="table" id="recommended_places">Recommended</table>')
+            $('#places_pane').append('<table class="table" id="local_places">Local</table>')
             for(var i=0; i< data.data.results.local.length; i++)  {
                 $.get(server + '/location/' + data.data.results.local[i].location_id, function(data) {
-                    $('#local_places').append('<li>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</li>')
+                    $('#local_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
                 })
 			}
             for(var i=0; i< data.data.results.recommended.length; i++)  {
                 $.get(server + '/location/' + data.data.results.recommended[i].location_id, function(data) {
-                    $('#recommended_places').append('<li>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</li>')
+                    $('#recommended_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
                 })
 			}
             for(var i=0; i< data.data.results.favorites.length; i++)  {
                 $.get(server + '/location/' + data.data.results.favorites[i].location_id, function(data) {
-                    $('#favorite_places').append('<li>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</li>')
+                    $('#favorite_places').append('<tr><td>' + data.data.location.name + ' - ' + data.data.location.street_1 + '</td></tr>')
                 })
 			}
         })
@@ -135,11 +136,12 @@ $(document).ready(function() {
    function loadDealsPane(data) { 
        // Load content for deals
        $('#deals_pane').html('')
-       $('#deals_pane').append('<ul></ul>')
+       $('#deals_pane').append('<table class="table"></table>')
+       $('#deals_pane table').append('<thead><tr><td>Description</td><td>QPoints</td></tr></thead>')
             for(var i=0; i< data.data.results.local.length; i++)  {
                 $.get(server + '/public/deals/' + data.data.results.local[i].location_id, function(data) {
                     for(var i=0; i<data.data.deals.length; i++) {
-                        $('#deals_pane ul').append('<li>' + data.data.deals[i].text + ' - ' + data.data.deals[i].qpoint_cost + '</li>')
+                        $('#deals_pane table').append('<tr><td>' + data.data.deals[i].text + ' </td><td> ' + data.data.deals[i].qpoint_cost + '</td></tr>')
                 	}
                 })
             }
@@ -150,10 +152,10 @@ $(document).ready(function() {
            $.get(server + '/friends/' + user_id, function(data) {
                 if(data.data.friends.length > 0) {
                     $('#friends_pane').html('')
-                    $('#friends_pane').append('<ul></ul>')
+                    $('#friends_pane').append('<table class="table"></table>')
 				}
                 for(var i=0; i<data.data.friends.length; i++) {
-                    $('#friends_pane ul').append('<li>' + data.data.friends[i].first_name + ' ' +data.data.friends[i].last_name + '</li>')
+                    $('#friends_pane table').append('<tr><td style="width: 40px;"><img src=' + data.data.friends[i].image_url + '></td><td>' + data.data.friends[i].first_name + ' ' +data.data.friends[i].last_name + '</td></tr>')
                	}
            })
        }
@@ -165,31 +167,41 @@ $(document).ready(function() {
 				//console.log(data.data.events.length)
                 if(data.data.events.length > 0) {
                     $('#history_pane').html('')
-                    $('#history_pane').append('<ul></ul>')
+                    $('#history_pane').append('<table class="table"></table>')
 				}
                 for(var i=0; i<data.data.events.length; i++) {
-                    $('#history_pane ul').append('<li>' + data.data.events[i].first_person_message + '</li>')
+                    $('#history_pane table').append('<tr><td>' + data.data.events[i].first_person_message + '</td></tr>')
                	}
            })
        }
 
 
-amplify.subscribe('geolocation_changed', function() {
-        console.log('amplify caught a geolocation_changed event')
-        waitForGeolocation()
-        loadContentPane()
-        loadFriendsPane()
-        loadBadgesPane()
-        loadHistoryPane()  
-}) 
+   function renderThumbnails(data) {
+   // populate the thumbnails at the top of the screen
+   
 
+
+   }
+
+
+// pub/sub
 
 amplify.subscribe('user_loggedin', function(){
         console.log('amplify caught a user_loggedin event')
-        loadContentPane()
+        loadFeedPane()
         loadBadgesPane()
         loadFriendsPane()
+        loadHistoryPane()
 })
+
+amplify.subscribe('geolocation_changed', function() {
+        console.log('amplify caught a geolocation_changed event')
+        waitForGeolocation()
+        renderThumbnails()
+
+}) 
+
+
 
 
 
