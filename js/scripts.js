@@ -158,7 +158,7 @@ $(document).ready(function() {
             for(var i=0; i< data.data.results.local.length; i++)  {
                 $.get(server + '/public/deals/' + data.data.results.local[i].location_id, function(data) {
                     for(var i=0; i<data.data.deals.length; i++) {
-                        $('#deals_pane table').append('<tr><td>' + data.data.deals[i].text + ' </td><td> ' + data.data.deals[i].qpoint_cost + '</td></tr>')
+                        $('#deals_pane table').append('<tr><td>' + data.data.deals[i].data.text + ' </td><td> ' + data.data.deals[i].data.qpoint_cost + '</td></tr>')
                 	}
                 })
             }
