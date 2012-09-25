@@ -5,6 +5,7 @@ $(document).ready(function() {
 
     user = {
         id: '',
+        fullname: '',
         username: '',
         password: '',
         lat: null,
@@ -14,7 +15,6 @@ $(document).ready(function() {
 
     $('#login-link').click(function() {
         $('#loginModal').modal({
-            //backdrop:   'static',
             keyboard:   false,
             show:       true
         })
@@ -23,7 +23,6 @@ $(document).ready(function() {
     if(!sessionStorage.getItem('user.id')) {
     } else {
         user.id = sessionStorage.getItem('user.id')
-        //amplify.publish('user loggedin')
     }
 
 
@@ -43,7 +42,22 @@ $(document).ready(function() {
         user.lng = '-98.500389999999996'
         amplify.publish('geolocation_changed')
     }
-        
+       
+
+    // Get credentials from login form and try to login
+    $('#loginbutton').click(function() {
+        user.username = $('#loginUser').val()
+        user.password = $('#loginPass').val()
+        $.post(server + '/login', user, function(data) {
+            user.id = data.data.user.id
+            user.fullname = data.data.user.fullname
+            sessionStorage.setItem('user_id', user.id)
+            $('#loginModal').modal('hide')
+            ampliify.publish('user_loggedin')
+        })
+    
+    })
+
     $('.change_location').click(function() {
         var index = $('.change_location').index(this)
         switch(index) {
