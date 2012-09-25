@@ -50,10 +50,10 @@ $(document).ready(function() {
         user.password = $('#loginPass').val()
         $.post(server + '/login', user, function(data) {
             user.id = data.data.user.id
-            user.fullname = data.data.user.fullname
+            user.fullname = data.data.user.full_name
             sessionStorage.setItem('user_id', user.id)
             $('#loginModal').modal('hide')
-            ampliify.publish('user_loggedin')
+            amplify.publish('user_loggedin')
         })
     
     })
