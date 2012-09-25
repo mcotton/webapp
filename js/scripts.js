@@ -49,7 +49,8 @@ $(document).ready(function() {
                         $('#loginModal').modal('hide')
                         amplify.publish('user_loggedin')
                     })
-    })
+        })
+    }
 
     $('.change_location').click(function() {
         var index = $('.change_location').index(this)
