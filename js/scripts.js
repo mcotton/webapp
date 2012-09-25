@@ -2,11 +2,21 @@ $(document).ready(function() {
     
     // global variables :(
     server = '/v1.2/qliqserver'
-    user_lat = null
-    user_lng = null
+
+    user = {
+        id: '4853',
+        username: 'mcotton@mcottondesign.com',
+        password: 'qliqapp',
+        lat: null,
+        lng: null
+    }
+
+
+    user.lat = null
+    user.lng = null
 
     // Show the login modal
-    if(!sessionStorage.getItem('user_id')) {
+    if(!sessionStorage.getItem('user.id')) {
         //$('#loginModal').modal({
         //    backdrop:   'static',
         //    keyboard:   false,
@@ -14,8 +24,8 @@ $(document).ready(function() {
         //})
         doLogin()
     } else {
-        user_id = sessionStorage.getItem('user_id')
-        amplify.publish('user_loggedin')
+        user.id = sessionStorage.getItem('user.id')
+        amplify.publish('user loggedin')
     }
 
 
@@ -25,14 +35,14 @@ $(document).ready(function() {
         navigator.geolocation.getCurrentPosition(function(position) {
             sessionStorage.setItem('lat', position.coords.latitude)
             sessionStorage.setItem('lng', position.coords.longitude)
-            user_lat = sessionStorage.getItem('lat')
-            user_lng = sessionStorage.getItem('lng')
+            user.lat = sessionStorage.getItem('lat')
+            user.lng = sessionStorage.getItem('lng')
             amplify.publish('geolocation_changed')
         })
     } else {
         console.log('geolocation is not available, using default')
-        user_lat = '29.43288'
-        user_lng = '-98.500389999999996'
+        user.lat = '29.43288'
+        user.lng = '-98.500389999999996'
         amplify.publish('geolocation_changed')
     }
         
@@ -40,14 +50,9 @@ $(document).ready(function() {
     // and closes the box if successful
     //$('#loginbutton').click(function() {
     function doLogin() {
-        $.post(server + '/login', {
-                                    //'username': $('#loginUser').val(), 
-                                    //'password':$('#loginPass').val()
-                                    'username': 'mcotton@mcottondesign.com, 
-                                    'password': 'qliqapp'
-                                    }, function(data) {
+        $.post(server + '/login', user, function(data) {
  
-                        sessionStorage.setItem('user_id', data.data.user.id)
+                        sessionStorage.setItem('user.id', data.data.user.id)
                         $('#loginModal').modal('hide')
                         amplify.publish('user_loggedin')
                     })
@@ -58,18 +63,18 @@ $(document).ready(function() {
         console.log(index)
         switch(index) {
             case 0:
-                user_lat = '29.6256999999999984'    
-                user_lng = '-98.4958599999999933'  
+                user.lat = '29.6256999999999984'    
+                user.lng = '-98.4958599999999933'  
                 amplify.publish('geolocation_changed')
                 break
            case 1:
-                user_lat = '29.4328900000000004'    
-                user_lng = '-98.5003899999999959'  
+                user.lat = '29.4328900000000004'    
+                user.lng = '-98.5003899999999959'  
                 amplify.publish('geolocation_changed')
                 break
            case 2:
-                user_lat = '29.7900500000000008'    
-                user_lng = '-98.7296300000000002'  
+                user.lat = '29.7900500000000008'    
+                user.lng = '-98.7296300000000002'  
                 amplify.publish('geolocation_changed')
                 break
            default:
@@ -82,7 +87,7 @@ $(document).ready(function() {
   
                
     // Once they've made it throught the login modal
-    // We can use the user_id and start fetching
+    // We can use the user.id and start fetching
     // user data to fill these panes
     function loadFeedPane() {
         // Load content for social
@@ -98,7 +103,7 @@ $(document).ready(function() {
     function loadBadgesPane() {
         // Load content for badges
 
-        $.get(server + '/badges/' + user_id, function(data) {
+        $.get(server + '/badges/' + user.id, function(data) {
             $('#badges_pane').html('') 
             $('#badges_pane').append('<table class="table"></table>')     
             for(var i=0; i< data.data.badges.length; i++) {
@@ -113,7 +118,7 @@ $(document).ready(function() {
     function waitForGeolocation() {
 
         // Load content for places
-        $.get(server + '/places?lat=' + user_lat + '&lng=' + user_lng, function(data) {
+        $.get(server + '/places?lat=' + user.lat + '&lng=' + user.lng, function(data) {
             loadDealsPane(data)
             $('#places_pane').html('')
             $('#places_pane').append('<table class="table" id="favorite_places">Favorite</table>')
@@ -170,7 +175,7 @@ $(document).ready(function() {
 
    function loadFriendsPane() { 
        // Load content for friends
-           $.get(server + '/friends/' + user_id, function(data) {
+           $.get(server + '/friends/' + user.id, function(data) {
                 if(data.data.friends.length > 0) {
                     $('#friends_pane').html('')
                     $('#friends_pane').append('<table class="table"></table>')
@@ -184,7 +189,7 @@ $(document).ready(function() {
         
    function loadHistoryPane() { 
        // Load content for friends
-           $.get(server + '/history/' + user_id, function(data) {
+           $.get(server + '/history/' + user.id, function(data) {
 				//console.log(data.data.events.length)
                 if(data.data.events.length > 0) {
                     $('#history_pane').html('')
