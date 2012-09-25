@@ -165,7 +165,7 @@ $(document).ready(function() {
        $('#deals_pane').append('<table class="table"></table>')
        $('#deals_pane table').append('<thead><tr><td>Description</td><td>QPoints</td></tr></thead>')
             for(var i=0; i< data.data.results.local.length; i++)  {
-                $.get(server + '/public/deals/' + data.data.results.local[i].location_id, function(data) {
+                $.get(server + '/public/deals/' + data.data.results.local[i].business_id, function(data) {
                     for(var i=0; i<data.data.deals.length; i++) {
                         $('#deals_pane table').append('<tr><td>' + data.data.deals[i].data.text + ' </td><td> ' + data.data.deals[i].data.qpoint_cost + '</td></tr>')
                 	}
