@@ -7,11 +7,12 @@ $(document).ready(function() {
 
     // Show the login modal
     if(!sessionStorage.getItem('user_id')) {
-        $('#loginModal').modal({
-            backdrop:   'static',
-            keyboard:   false,
-            show:       true
-        })
+        //$('#loginModal').modal({
+        //    backdrop:   'static',
+        //    keyboard:   false,
+        //    show:       true
+        //})
+        doLogin()
     } else {
         user_id = sessionStorage.getItem('user_id')
         amplify.publish('user_loggedin')
@@ -37,7 +38,8 @@ $(document).ready(function() {
         
     // Login form queries the API
     // and closes the box if successful
-    $('#loginbutton').click(function() {
+    //$('#loginbutton').click(function() {
+    function doLogin() {
         $.post(server + '/login', {
                                     'username': $('#loginUser').val(), 
                                     'password':$('#loginPass').val()
