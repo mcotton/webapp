@@ -12,16 +12,15 @@ $(document).ready(function() {
     }
 
 
-    user.lat = null
-    user.lng = null
+    $('#login-link').click(function() {
+        $('#loginModal').modal({
+            //backdrop:   'static',
+            keyboard:   false,
+            show:       true
+        })
+    })
 
-    // Show the login modal
     if(!sessionStorage.getItem('user.id')) {
-        //$('#loginModal').modal({
-        //    backdrop:   'static',
-        //    keyboard:   false,
-        //    show:       true
-        //})
     } else {
         user.id = sessionStorage.getItem('user.id')
         //amplify.publish('user loggedin')
