@@ -4,9 +4,9 @@ $(document).ready(function() {
     server = '/v1.2/qliqserver'
 
     user = {
-        id: '4853',
-        username: 'mcotton@mcottondesign.com',
-        password: 'qliqapp',
+        id: '',
+        username: '',
+        password: '',
         lat: null,
         lng: null
     }
@@ -22,10 +22,9 @@ $(document).ready(function() {
         //    keyboard:   false,
         //    show:       true
         //})
-        doLogin()
     } else {
         user.id = sessionStorage.getItem('user.id')
-        amplify.publish('user loggedin')
+        //amplify.publish('user loggedin')
     }
 
 
@@ -46,21 +45,8 @@ $(document).ready(function() {
         amplify.publish('geolocation_changed')
     }
         
-    // Login form queries the API
-    // and closes the box if successful
-    //$('#loginbutton').click(function() {
-    function doLogin() {
-        $.post(server + '/login', user, function(data) {
- 
-                        sessionStorage.setItem('user.id', data.data.user.id)
-                        $('#loginModal').modal('hide')
-                        amplify.publish('user_loggedin')
-                    })
-        }
-
     $('.change_location').click(function() {
         var index = $('.change_location').index(this)
-        console.log(index)
         switch(index) {
             case 0:
                 user.lat = '29.6256999999999984'    
@@ -138,7 +124,6 @@ $(document).ready(function() {
     }
 
    function loadFeaturedPlaces(data) {
-      console.log(data)
       lst = []
       icons = $('.thumbnail')
       for(var i=0; i< data.favorites.length; i++) {
@@ -190,7 +175,6 @@ $(document).ready(function() {
    function loadHistoryPane() { 
        // Load content for friends
            $.get(server + '/history/' + user.id, function(data) {
-				//console.log(data.data.events.length)
                 if(data.data.events.length > 0) {
                     $('#history_pane').html('')
                     $('#history_pane').append('<table class="table"></table>')
