@@ -41,16 +41,17 @@ $(document).ready(function() {
     //$('#loginbutton').click(function() {
     function doLogin() {
         $.post(server + '/login', {
-                                    'username': $('#loginUser').val(), 
-                                    'password':$('#loginPass').val()
+                                    //'username': $('#loginUser').val(), 
+                                    //'password':$('#loginPass').val()
+                                    'username': 'mcotton@mcottondesign.com, 
+                                    'password': 'qliqapp'
                                     }, function(data) {
  
                         sessionStorage.setItem('user_id', data.data.user.id)
                         $('#loginModal').modal('hide')
                         amplify.publish('user_loggedin')
                     })
-        })
-    }
+        }
 
     $('.change_location').click(function() {
         var index = $('.change_location').index(this)
